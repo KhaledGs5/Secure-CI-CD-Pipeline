@@ -1,0 +1,79 @@
+<div *ngIf="viewMode; else editable">
+    <div *ngIf="currentTeam.id">
+      <h4>Team</h4>
+      <div>
+        <label><strong>Name:</strong></label> {{ currentTeam.name }}
+      </div>
+      <div>
+        <label><strong>Age:</strong></label>
+        {{ currentTeam.age }}
+      </div>
+      <div>
+        <label><strong>Players Number:</strong></label>
+        {{ currentTeam.playersNumber }} 
+      </div>
+  
+      <a
+        class="badge badge-warning"
+        routerLink="/teams/{{ currentTeam.id }}"
+      >
+        Edit
+      </a>
+    </div>
+  
+    <div *ngIf="!currentTeam">
+      <br />
+      <p>Please click on a Team...</p>
+    </div>
+  </div>
+  
+  <ng-template #editable>
+    <div *ngIf="currentTeam.id" class="edit-form">
+      <h4>Team</h4>
+      <form>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            [(ngModel)]="currentTeam.name"
+            name="name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input
+            type="text"
+            class="form-control"
+            id="age"
+            [(ngModel)]="currentTeam.age"
+            name="age"
+          />
+        </div>
+  
+        <div class="form-group">
+          <label><strong>Players Number:</strong></label>
+          {{ currentTeam.playersNumber}}
+        </div>
+      </form>
+  
+      <button class="badge badge-danger mr-2" (click)="deleteTeam()">
+        Delete
+      </button>
+  
+      <button
+        type="submit"
+        class="badge badge-success mb-2"
+        (click)="updateTeam()"
+      >
+        Update
+      </button>
+      <p>{{ message }}</p>
+    </div>
+  
+    <div *ngIf="!currentTeam.id">
+      <br />
+      <p>Cannot access this Team...</p>
+    </div>
+  </ng-template>
