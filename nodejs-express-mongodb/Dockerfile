@@ -12,4 +12,4 @@ ENV PORT 8081
 
 EXPOSE ${PORT}
 
-CMD ["node", "server.js"]
+CMD ["npm", "run" ,"server"]
