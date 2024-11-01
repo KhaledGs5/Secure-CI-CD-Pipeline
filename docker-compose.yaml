@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  client:
+    build: ./frontend/
+    container_name: footfront
+    ports:
+      - "4200:4200"
+    command: ng serve --host 0.0.0.0
+    volumes:
+      - "./frontend/:/app"
+      - "/app/node_modules"
+    depends_on:
+      - server
+
+  server:
+    build: ./nodejs-express-mongodb/
+    container_name: footback
+    ports:
+      - "8081:8081"
+    command: npm run server
+    env_file:
+      - .env
+    volumes:
+      - "./nodejs-express-mongodb/:/app"
+      - "/app/node_modules"
+    depends_on:
+      - db
+
+  db:
+    image: mongo:4.4
+    container_name: footdb
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    volumes:
+      - db-data:/data/db
+
+volumes:
+  db-data: {}
