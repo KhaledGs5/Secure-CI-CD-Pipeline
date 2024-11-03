@@ -28,6 +28,7 @@ spec:
   ports:
   - port: 4200
     targetPort: 4200
+    nodePort: 31370 
   selector:
     app: secure-ci-cd-pipeline-client
 
