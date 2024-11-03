@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  selector:
+    matchLabels:
+      app: secure-ci-cd-pipeline-server
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: secure-ci-cd-pipeline-server
+    spec:
+      containers:
+      - name: secure-ci-cd-pipeline-server
+        image: khaledgs/secure_ci_cd_pipeline_server
+        ports:
+        - containerPort: 8081
+        env:
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              name: backend-env
+              key: MONGO_URI
+        - name: PORT
+          valueFrom:
+            secretKeyRef:
+              name: backend-env
+              key: PORT
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  type: NodePort
+  ports:
+  - port: 8081
+    targetPort: 8081
+  selector:
+    app: secure-ci-cd-pipeline-server

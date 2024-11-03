@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  selector:
+    matchLabels:
+      app: secure-ci-cd-pipeline-client  
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: secure-ci-cd-pipeline-client  
+    spec:
+      containers:
+      - name: secure-ci-cd-pipeline-client  
+        image: khaledgs/secure_ci_cd_pipeline_client
+        ports:
+        - containerPort: 4200
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: NodePort
+  ports:
+  - port: 4200
+    targetPort: 4200
+  selector:
+    app: secure-ci-cd-pipeline-client
+
