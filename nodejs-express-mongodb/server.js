@@ -25,8 +25,10 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });
 
-// const db = require("./app/models");
 
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('DB Connected'))
-    .catch(err => console.log(err.message));
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 30000 
+})
+.then(() => console.log('DB Connected'))
+.catch(err => console.log('DB connection error:', err.message));
+

@@ -21,13 +21,8 @@ spec:
         - name: MONGO_URL
           valueFrom:
             secretKeyRef:
-              name: backend-env
-              key: MONGO_URI
-        - name: PORT
-          valueFrom:
-            secretKeyRef:
-              name: backend-env
-              key: PORT
+              name: backend-secret
+              key: mongo-url
 
 ---
 apiVersion: v1
@@ -37,7 +32,19 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 8081
-    targetPort: 8081
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
+      nodePort: 30001
   selector:
     app: secure-ci-cd-pipeline-server
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: backend-secret
+type: Opaque
+data:
+  # Ensure the MongoDB URI is Base64 encoded
+  mongo-url: bW9uZ29kYitzcnY6Ly9raGFsZWRnYXNzYXJhOm9DME1JVmwwR1ExZnJtUGtAY2x1c3RlcjAuN2hid3QubW9uZ29kYi5uZXQv
