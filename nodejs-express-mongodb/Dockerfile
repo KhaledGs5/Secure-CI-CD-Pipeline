@@ -1,5 +1,7 @@
 FROM node:20-alpine
 
+RUN adduser -D myuser
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -7,6 +9,9 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+
+USER myuser
 
 ENV PORT 8081
 
