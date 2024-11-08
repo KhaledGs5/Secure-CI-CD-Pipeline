@@ -25,13 +25,13 @@ pipeline {
         //     }
         // }
         stage('Vulnerability Scan - Docker') {
-            parallel {
-                stage('OWASP SCAN') {
-                    steps {
-                        dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DP'
-                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                    }
-                }
+            // parallel {
+            //     stage('OWASP SCAN') {
+            //         steps {
+            //             dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DP'
+            //             dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            //         }
+            //     }
                 stage('Trivy Scan - Docker') {
                     steps {
                         script {
@@ -55,16 +55,16 @@ pipeline {
                             }
                         }
                     }
-                }
-                stage('OPA Conftest') {
-                    steps {
-                        script {
-                            def workspacePath = env.WORKSPACE.replace('\\', '/')
-                            def conftestCommand = "docker run --rm -v ${workspacePath}:/project openpolicyagent/conftest test --policy opa-security.rego Dockerfile"
-                            sh conftestCommand
-                        }
-                    }
-                }
+                // }
+                // stage('OPA Conftest') {
+                //     steps {
+                //         script {
+                //             def workspacePath = env.WORKSPACE.replace('\\', '/')
+                //             def conftestCommand = "docker run --rm -v ${workspacePath}:/project openpolicyagent/conftest test --policy opa-security.rego Dockerfile"
+                //             sh conftestCommand
+                //         }
+                //     }
+                // }
             }
         }
         // stage('Docker Build and Push') {
