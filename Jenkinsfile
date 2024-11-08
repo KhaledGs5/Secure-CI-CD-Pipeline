@@ -62,13 +62,22 @@ pipeline {
                         }
                     }
                 }
-                stage('OPA Conftest') {
+                stage('OPA Conftest Frontend') {
                     steps {
                         script {
                             def workspacePath = env.WORKSPACE.replace('\\', '/') + '/frontend'
                             echo "Workspace path: ${workspacePath}"
                             def conftestCommand = "docker run --rm -v ${workspacePath}:/frontend openpolicyagent/conftest test --policy /frontend/opa-security.rego /frontend/Dockerfile"
                             sh conftestCommand
+                        }
+                    }
+                }
+                stage('OPA Conftest Backend') {
+                    steps {
+                        script {
+                            def workspacePath = env.WORKSPACE.replace('\\', '/') + '/nodejs-express-mongodb'
+                            def conftestCommand = "docker run --rm -v ${workspacePath}:/nodejs-express-mongodb openpolicyagent/conftest test --policy /nodejs-express-mongodb/opa-security.rego /nodejs-express-mongodb/Dockerfile"
+                            bat conftestCommand
                         }
                     }
                 }
