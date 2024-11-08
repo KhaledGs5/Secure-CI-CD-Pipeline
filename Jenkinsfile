@@ -35,8 +35,8 @@ pipeline {
                 stage('Trivy Scan - Docker') {
                     steps {
                         script {
-                            // Define the Docker image to be scanned
-                            def dockerImageName = 'adoptopenjdk/openjdk8:alpine-slim'
+                            // Define the Docker image to be scanned (using the base image from the Dockerfile)
+                            def dockerImageName = 'node:20-alpine'
                             echo "Scanning Docker Image: ${dockerImageName}"
 
                             // Run Trivy scan for HIGH severity vulnerabilities on the Docker image
