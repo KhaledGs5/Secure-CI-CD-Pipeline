@@ -77,7 +77,7 @@ pipeline {
                         script {
                             def workspacePath = env.WORKSPACE.replace('\\', '/') + '/nodejs-express-mongodb'
                             def conftestCommand = "docker run --rm -v ${workspacePath}:/nodejs-express-mongodb openpolicyagent/conftest test --policy /nodejs-express-mongodb/opa-security.rego /nodejs-express-mongodb/Dockerfile"
-                            bat conftestCommand
+                            sh conftestCommand
                         }
                     }
                 }
