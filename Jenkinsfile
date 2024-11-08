@@ -24,44 +24,44 @@ pipeline {
         //         """
         //     }
         // }
-        // stage('Vulnerability Scan - Docker') {
-            // parallel {
-            //     stage('OWASP SCAN') {
-            //         steps {
-            //             dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DP'
-            //             dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            //         }
-            //     }
-                // stage('Trivy Scan - Docker') {
-                //     steps {
-                //         script {
-                //             // Define the Docker image to be scanned
-                //             def dockerImageName = 'node:20-alpine'
-                //             echo "Scanning Docker Image: ${dockerImageName}"
+        stage('Vulnerability Scan - Docker') {
+            parallel {
+                stage('OWASP SCAN') {
+                    steps {
+                        dependencyCheck additionalArguments: ' --scan ./', odcInstallation: 'DP'
+                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                    }
+                }
+                stage('Trivy Scan - Docker') {
+                    steps {
+                        script {
+                            // Define the Docker image to be scanned
+                            def dockerImageName = 'node:20-alpine'
+                            echo "Scanning Docker Image: ${dockerImageName}"
 
-                //             // Run Trivy scan for HIGH severity vulnerabilities on the Docker image
-                //             def highScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity HIGH --light ${dockerImageName}"
-                //             def highScanExitCode = sh(script: highScanCommand, returnStatus: true)
+                            // Run Trivy scan for HIGH severity vulnerabilities on the Docker image
+                            def highScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity HIGH --light ${dockerImageName}"
+                            def highScanExitCode = sh(script: highScanCommand, returnStatus: true)
 
-                //             // Run Trivy scan for CRITICAL severity vulnerabilities on the Docker image
-                //             def criticalScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 1 --severity CRITICAL --light ${dockerImageName}"
-                //             def criticalScanExitCode = sh(script: criticalScanCommand, returnStatus: true)
+                            // Run Trivy scan for CRITICAL severity vulnerabilities on the Docker image
+                            def criticalScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 1 --severity CRITICAL --light ${dockerImageName}"
+                            def criticalScanExitCode = sh(script: criticalScanCommand, returnStatus: true)
 
-                //             // Check the scan results for critical vulnerabilities
-                //             if (criticalScanExitCode != 0) {
-                //                 // If CRITICAL vulnerabilities are found, fail the pipeline
-                //                 error "Image scanning failed. CRITICAL vulnerabilities found."
-                //             } else {
-                //                 // If no CRITICAL vulnerabilities are found, check if HIGH vulnerabilities exist
-                //                 if (highScanExitCode != 0) {
-                //                     echo "HIGH vulnerabilities found, but no CRITICAL vulnerabilities."
-                //                 } else {
-                //                     echo "Image scanning passed. No HIGH or CRITICAL vulnerabilities found."
-                //                 }
-                //             }
-                //         }
-                //     }
-                // }
+                            // Check the scan results for critical vulnerabilities
+                            if (criticalScanExitCode != 0) {
+                                // If CRITICAL vulnerabilities are found, fail the pipeline
+                                error "Image scanning failed. CRITICAL vulnerabilities found."
+                            } else {
+                                // If no CRITICAL vulnerabilities are found, check if HIGH vulnerabilities exist
+                                if (highScanExitCode != 0) {
+                                    echo "HIGH vulnerabilities found, but no CRITICAL vulnerabilities."
+                                } else {
+                                    echo "Image scanning passed. No HIGH or CRITICAL vulnerabilities found."
+                                }
+                            }
+                        }
+                    }
+                }
                 stage('OPA Conftest') {
                     steps {
                         script {
@@ -71,8 +71,8 @@ pipeline {
                             sh conftestCommand
                         }
                     }
-                //}
-            // }
+                }
+            }
         }
         // stage('Docker Build and Push') {
         //     steps {
