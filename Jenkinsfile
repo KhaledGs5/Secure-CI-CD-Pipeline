@@ -49,9 +49,15 @@ pipeline {
 
                             // Check the scan results for critical vulnerabilities
                             if (criticalScanExitCode != 0) {
+                                // If CRITICAL vulnerabilities are found, fail the pipeline
                                 error "Image scanning failed. CRITICAL vulnerabilities found."
                             } else {
-                                echo "Image scanning passed. No CRITICAL vulnerabilities found."
+                                // If no CRITICAL vulnerabilities are found, check if HIGH vulnerabilities exist
+                                if (highScanExitCode != 0) {
+                                    echo "HIGH vulnerabilities found, but no CRITICAL vulnerabilities."
+                                } else {
+                                    echo "Image scanning passed. No HIGH or CRITICAL vulnerabilities found."
+                                }
                             }
                         }
                     }
