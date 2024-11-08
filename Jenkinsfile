@@ -67,7 +67,7 @@ pipeline {
                         script {
                             def workspacePath = env.WORKSPACE.replace('\\', '/') + '/frontend'
                             echo "Workspace path: ${workspacePath}"
-                            def conftestCommand = "docker run --rm -v ${workspacePath} openpolicyagent/conftest test --policy /frontend/opa-security.rego /frontend/Dockerfile"
+                            def conftestCommand = "docker run --rm -v ${workspacePath}:/frontend openpolicyagent/conftest test --policy /frontend/opa-security.rego /frontend/Dockerfile"
                             sh conftestCommand
                         }
                     }
