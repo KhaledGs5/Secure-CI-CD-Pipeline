@@ -24,7 +24,7 @@ pipeline {
         //         """
         //     }
         // }
-        stage('Vulnerability Scan - Docker') {
+        // stage('Vulnerability Scan - Docker') {
             // parallel {
             //     stage('OWASP SCAN') {
             //         steps {
@@ -65,7 +65,7 @@ pipeline {
                 //         }
                 //     }
                 // }
-            }
+            // }
         }
         // stage('Docker Build and Push') {
         //     steps {
