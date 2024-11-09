@@ -107,34 +107,34 @@ pipeline {
                         }
                     }
                 }
-                stage('KubeSec Scan') {
-                    steps {
-                        script {
-                            // Run the PowerShell script for KubeSec scanning
-                            sh "pwsh -ExecutionPolicy Bypass -File /var/lib/jenkins/workspace/Secure-CI-CD-Pipeline/K8s/kubesec-scan.ps1"
-                        }
-                    }
-                }
-                // stage('Trivy Scan - Kubernetes') {
+                // stage('KubeSec Scan') {
                 //     steps {
                 //         script {
-                //             // Run Trivy scan for HIGH severity vulnerabilities on the Docker image
-                //             def highScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity HIGH --light nadaomri/${DOCKER_IMAGE}:${BUILD_TAG}"
-                //             def highScanExitCode = bat(script: highScanCommand, returnStatus: true)
-
-                //             // Run Trivy scan for CRITICAL severity vulnerabilities on the Docker image
-                //             def criticalScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity CRITICAL --light nadaomri/${DOCKER_IMAGE}:${BUILD_TAG}"
-                //             def criticalScanExitCode = bat(script: criticalScanCommand, returnStatus: true)
-
-                //             // Check the scan results for critical vulnerabilities
-                //             if (criticalScanExitCode != 0) {
-                //                 error "Image scanning failed. CRITICAL vulnerabilities found."
-                //             } else {
-                //                 echo "Image scanning passed. No CRITICAL vulnerabilities found."
-                //             }
+                //             // Run the PowerShell script for KubeSec scanning
+                //             sh "pwsh -ExecutionPolicy Bypass -File /var/lib/jenkins/workspace/Secure-CI-CD-Pipeline/K8s/kubesec-scan.ps1"
                 //         }
                 //     }
                 // }
+                stage('Trivy Scan - Kubernetes') {
+                    steps {
+                        script {
+                            // Run Trivy scan for HIGH severity vulnerabilities on the Docker image
+                            def highScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity HIGH --light khaledgs/secure_ci_cd_pipeline_server"
+                            def highScanExitCode = sh(script: highScanCommand, returnStatus: true)
+
+                            // Run Trivy scan for CRITICAL severity vulnerabilities on the Docker image
+                            def criticalScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity CRITICAL --light khaledgs/secure_ci_cd_pipeline_server"
+                            def criticalScanExitCode = sh(script: criticalScanCommand, returnStatus: true)
+
+                            // Check the scan results for critical vulnerabilities
+                            if (criticalScanExitCode != 0) {
+                                error "Image scanning failed. CRITICAL vulnerabilities found."
+                            } else {
+                                echo "Image scanning passed. No CRITICAL vulnerabilities found."
+                            }
+                        }
+                    }
+                }
             }
         }
     }
