@@ -8,6 +8,7 @@ $frontendScanMessage = $frontendScanResult[0].message
 $frontendScanScore = $frontendScanResult[0].score
 
 # Process the frontend scan result
+Write-Host "Frontend Scan Message: $frontendScanMessage"
 if ($frontendScanScore -ge 5) {
     Write-Host "Frontend Score is $frontendScanScore"
     Write-Host "Kubesec Frontend Scan: $frontendScanMessage"
@@ -23,6 +24,7 @@ $backendScanMessage = $backendScanResult[0].message
 $backendScanScore = $backendScanResult[0].score
 
 # Process the backend scan result
+Write-Host "Backend Scan Message: $backendScanMessage"
 if ($backendScanScore -ge 5) {
     Write-Host "Backend Score is $backendScanScore"
     Write-Host "Kubesec Backend Scan: $backendScanMessage"
