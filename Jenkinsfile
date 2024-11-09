@@ -83,12 +83,15 @@ pipeline {
         //         }
         //     }
         // }
-        stage('Docker Build and Push') {
+        stage('Docker Compose Build and Push') {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
-                        sh "docker build -t khaledgs/secure-ci-cd-pipeline ."
-                        sh "docker push khaledgs/secure-ci-cd-pipeline"
+                        // Build the images using docker-compose
+                        sh "docker-compose build"
+
+                        // Push the images to the registry
+                        sh "docker-compose push"
                     }
                 }
             }
