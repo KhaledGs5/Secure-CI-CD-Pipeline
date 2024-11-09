@@ -96,6 +96,47 @@ pipeline {
                 }
             }
         }
+        // stage('Vulnerability Scan - Kubernetes') {
+        //     parallel {
+        //         stage('OPA conftest') {
+        //             steps {
+        //                 script {
+        //                     def workspacePath = env.WORKSPACE.replace('\\', '/') + '/K8s'
+        //                     def conftestCommand = "docker run --rm -v ${workspacePath}:/K8s openpolicyagent/conftest test --policy /K8s/opa-k8s-security.rego /K8s/frontend-deployment.yaml"
+        //                     sh conftestCommand
+        //                 }
+        //             }
+        //         }
+        //         stage('KubeSec Scan') {
+        //             steps {
+        //                 script {
+        //                     // Run the PowerShell script for KubeSec scanning
+        //                     sh "powershell -ExecutionPolicy Bypass -File kubesec-scan.ps1"
+        //                 }
+        //             }
+        //         }
+        //         stage('Trivy Scan - Kubernetes') {
+        //             steps {
+        //                 script {
+        //                     // Run Trivy scan for HIGH severity vulnerabilities on the Docker image
+        //                     def highScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity HIGH --light nadaomri/${DOCKER_IMAGE}:${BUILD_TAG}"
+        //                     def highScanExitCode = bat(script: highScanCommand, returnStatus: true)
+
+        //                     // Run Trivy scan for CRITICAL severity vulnerabilities on the Docker image
+        //                     def criticalScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity CRITICAL --light nadaomri/${DOCKER_IMAGE}:${BUILD_TAG}"
+        //                     def criticalScanExitCode = bat(script: criticalScanCommand, returnStatus: true)
+
+        //                     // Check the scan results for critical vulnerabilities
+        //                     if (criticalScanExitCode != 0) {
+        //                         error "Image scanning failed. CRITICAL vulnerabilities found."
+        //                     } else {
+        //                         echo "Image scanning passed. No CRITICAL vulnerabilities found."
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 }
 

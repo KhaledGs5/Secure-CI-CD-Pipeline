@@ -2,6 +2,7 @@ version: '3.8'
 services:
   client:
     build: ./frontend/
+    image: khaledgs/secure_ci_cd_pipeline_client
     container_name: footfront
     ports:
       - "4200:4200"
@@ -14,6 +15,7 @@ services:
 
   server:
     build: ./nodejs-express-mongodb/
+    image: khaledgs/secure_ci_cd_pipeline_server
     container_name: footback
     ports:
       - "8081:8081"
