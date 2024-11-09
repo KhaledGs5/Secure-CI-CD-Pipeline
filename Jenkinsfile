@@ -107,30 +107,45 @@ pipeline {
                         }
                     }
                 }
-                // stage('KubeSec Scan') {
-                //     steps {
-                //         script {
-                //             // Run the PowerShell script for KubeSec scanning
-                //             sh "pwsh -ExecutionPolicy Bypass -File /var/lib/jenkins/workspace/Secure-CI-CD-Pipeline/K8s/kubesec-scan.ps1"
-                //         }
-                //     }
-                // }
+                stage('KubeSec Scan') {
+                    steps {
+                        script {
+                            // Run the PowerShell script for KubeSec scanning
+                            sh "pwsh -ExecutionPolicy Bypass -File /var/lib/jenkins/workspace/Secure-CI-CD-Pipeline/K8s/kubesec-scan.ps1"
+                        }
+                    }
+                }
                 stage('Trivy Scan - Kubernetes') {
                     steps {
                         script {
-                            // Run Trivy scan for HIGH severity vulnerabilities on the Docker image
-                            def highScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity HIGH --light khaledgs/secure_ci_cd_pipeline_server"
-                            def highScanExitCode = sh(script: highScanCommand, returnStatus: true)
+                            // Run Trivy scan for HIGH severity vulnerabilities on the backend Docker image (server)
+                            def highScanServerCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity HIGH --light khaledgs/secure_ci_cd_pipeline_server"
+                            def highScanServerExitCode = sh(script: highScanServerCommand, returnStatus: true)
 
-                            // Run Trivy scan for CRITICAL severity vulnerabilities on the Docker image
-                            def criticalScanCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity CRITICAL --light khaledgs/secure_ci_cd_pipeline_server"
-                            def criticalScanExitCode = sh(script: criticalScanCommand, returnStatus: true)
+                            // Run Trivy scan for CRITICAL severity vulnerabilities on the backend Docker image (server)
+                            def criticalScanServerCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity CRITICAL --light khaledgs/secure_ci_cd_pipeline_server"
+                            def criticalScanServerExitCode = sh(script: criticalScanServerCommand, returnStatus: true)
 
-                            // Check the scan results for critical vulnerabilities
-                            if (criticalScanExitCode != 0) {
-                                error "Image scanning failed. CRITICAL vulnerabilities found."
+                            // Check the scan results for critical vulnerabilities for server
+                            if (criticalScanServerExitCode != 0) {
+                                error "Server image scanning failed. CRITICAL vulnerabilities found."
                             } else {
-                                echo "Image scanning passed. No CRITICAL vulnerabilities found."
+                                echo "Server image scanning passed. No CRITICAL vulnerabilities found."
+                            }
+
+                            // Run Trivy scan for HIGH severity vulnerabilities on the frontend Docker image (client)
+                            def highScanClientCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity HIGH --light khaledgs/secure_ci_cd_pipeline_client"
+                            def highScanClientExitCode = sh(script: highScanClientCommand, returnStatus: true)
+
+                            // Run Trivy scan for CRITICAL severity vulnerabilities on the frontend Docker image (client)
+                            def criticalScanClientCommand = "docker run --rm aquasec/trivy:0.17.2 image --exit-code 0 --severity CRITICAL --light khaledgs/secure_ci_cd_pipeline_client"
+                            def criticalScanClientExitCode = sh(script: criticalScanClientCommand, returnStatus: true)
+
+                            // Check the scan results for critical vulnerabilities for client
+                            if (criticalScanClientExitCode != 0) {
+                                error "Client image scanning failed. CRITICAL vulnerabilities found."
+                            } else {
+                                echo "Client image scanning passed. No CRITICAL vulnerabilities found."
                             }
                         }
                     }
