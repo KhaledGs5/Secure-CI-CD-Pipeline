@@ -23,6 +23,9 @@ spec:
             secretKeyRef:
               name: backend-secret
               key: mongo-url
+        securityContext:
+          runAsNonRoot: true            # Ensures the container does not run as root
+          runAsUser: 1000               # Set a non-root user ID (you can adjust the ID if needed)
 
 ---
 apiVersion: v1

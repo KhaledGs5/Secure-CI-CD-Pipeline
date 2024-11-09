@@ -17,6 +17,9 @@ spec:
         image: khaledgs/secure_ci_cd_pipeline_client
         ports:
         - containerPort: 4200
+        securityContext:
+          runAsNonRoot: true            # Ensures the container does not run as root
+          runAsUser: 1000               # Set a non-root user ID
 
 ---
 apiVersion: v1
@@ -32,4 +35,3 @@ spec:
       nodePort: 30000
   selector:
     app: secure-ci-cd-pipeline-client
-
