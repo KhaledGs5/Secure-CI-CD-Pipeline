@@ -111,7 +111,7 @@ pipeline {
                     steps {
                         script {
                             // Run the PowerShell script for KubeSec scanning
-                            sh "powershell -ExecutionPolicy Bypass -File /K8s/kubesec-scan.ps1"
+                            sh "pwsh -ExecutionPolicy Bypass -File /K8s/kubesec-scan.ps1"
                         }
                     }
                 }
