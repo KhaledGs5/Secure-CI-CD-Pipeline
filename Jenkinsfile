@@ -87,8 +87,8 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-cred') {
-                        sh "docker build -t khaledgs/Secure-CI-CD-Pipeline ."
-                        sh "docker push khaledgs/Secure-CI-CD-Pipeline"
+                        sh "docker build -t khaledgs/secure-ci-cd-pipeline ."
+                        sh "docker push khaledgs/secure-ci-cd-pipeline"
                     }
                 }
             }
