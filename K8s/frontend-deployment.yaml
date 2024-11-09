@@ -15,11 +15,33 @@ spec:
       containers:
       - name: secure-ci-cd-pipeline-client  
         image: khaledgs/secure_ci_cd_pipeline_client
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 4200
         securityContext:
           runAsNonRoot: true            # Ensures the container does not run as root
           runAsUser: 1000               # Set a non-root user ID
+          readOnlyRootFilesystem: true  # Makes the root filesystem read-only
+          allowPrivilegeEscalation: false  # Prevents privilege escalation
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 4200
+          initialDelaySeconds: 10
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: 4200
+          initialDelaySeconds: 5
+          periodSeconds: 5
 
 ---
 apiVersion: v1
