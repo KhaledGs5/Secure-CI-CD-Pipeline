@@ -158,7 +158,7 @@ pipeline {
                     steps {
                         script {
                             withKubeConfig([credentialsId: 'minikube-server']) {
-                                sh 'echo "khaled" | sudo -S kubectl -n default apply -f /home/khaled/DevOps/Secure_CI_CD_Pipeline/K8s/frontend-deployment.yaml'
+                                sh "kubectl -n default apply -f /home/khaled/DevOps/Secure_CI_CD_Pipeline/K8s/frontend-deployment.yaml"
                             }
                         }
                     }
