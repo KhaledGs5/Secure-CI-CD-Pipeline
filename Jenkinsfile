@@ -159,6 +159,7 @@ pipeline {
                         script {
                             withKubeConfig([credentialsId: 'minikube-server']) {
                                 sh "kubectl -n default apply -f /home/khaled/DevOps/Secure_CI_CD_Pipeline/K8s/frontend-deployment.yaml"
+                                sh "kubectl -n default apply -f /home/khaled/DevOps/Secure_CI_CD_Pipeline/K8s/backend-deployment.yaml"
                             }
                         }
                     }
@@ -171,10 +172,12 @@ pipeline {
                                 sh "sleep 60"
 
                                 // Check rollout status
-                                def rolloutStatusCommand = "kubectl -n default rollout status deploy frontend --timeout=5s"
-                                def rolloutExitCode = sh(script: rolloutStatusCommand, returnStatus: true)
+                                def rolloutStatusCommandFrontend = "kubectl -n default rollout status deploy frontend --timeout=5s"
+                                def rolloutStatusCommandBackend = "kubectl -n default rollout status deploy backend --timeout=5s"
+                                def rolloutExitCodeFrontend = sh(script: rolloutStatusCommandFrontend, returnStatus: true)
+                                def rolloutExitCodeBackend = sh(script: rolloutStatusCommandBackend, returnStatus: true)
 
-                                if (rolloutExitCode != 0) {
+                                if (rolloutExitCodeFrontend != 0 && rolloutExitCodeBackend !=0) {
                                     echo "Deployment frontend Rollout has Failed"
                                     sh "kubectl -n default rollout undo deploy frontend"
                                     error "Deployment frontend rollout failed."
