@@ -15,7 +15,6 @@ spec:
       containers:
       - name: secure-ci-cd-pipeline-server
         image: khaledgs/secure_ci_cd_pipeline_server
-        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8081
         env:
