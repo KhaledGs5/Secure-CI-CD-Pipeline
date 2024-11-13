@@ -163,24 +163,24 @@ pipeline {
                         }
                     }
                 }
-                stage('Rollout status') {
+               stage('Rollout status') {
                     steps {
                         script {
                             withKubeConfig([credentialsId:'minikube-server']) {
-                            // Wait for a minute before checking rollout status
-                            sh "pwsh -Command Start-Sleep -Seconds 60"
+                                // Wait for a minute before checking rollout status
+                                sh "sleep 60"
 
-                            // Check rollout status
-                            def rolloutStatusCommand = "kubectl -n default rollout status deploy secure-ci-cd-pipeline-client --timeout=5s"
-                            def rolloutExitCode = bat(script: rolloutStatusCommand, returnStatus: true)
+                                // Check rollout status
+                                def rolloutStatusCommand = "kubectl -n default rollout status deploy secure-ci-cd-pipeline-client --timeout=5s"
+                                def rolloutExitCode = sh(script: rolloutStatusCommand, returnStatus: true)
 
-                            if (rolloutExitCode != 0) {
-                                echo "Deployment secure-ci-cd-pipeline-client Rollout has Failed"
-                                sh "kubectl -n default rollout undo deploy secure-ci-cd-pipeline-client"
-                                error "Deployment secure-ci-cd-pipeline-client rollout failed."
-                            } else {
-                                echo "Deployment secure-ci-cd-pipeline-client Rollout is Successful"
-                            }
+                                if (rolloutExitCode != 0) {
+                                    echo "Deployment secure-ci-cd-pipeline-client Rollout has Failed"
+                                    sh "kubectl -n default rollout undo deploy secure-ci-cd-pipeline-client"
+                                    error "Deployment secure-ci-cd-pipeline-client rollout failed."
+                                } else {
+                                    echo "Deployment secure-ci-cd-pipeline-client Rollout is Successful"
+                                }
                             }
                         }
                     }
