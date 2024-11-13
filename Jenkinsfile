@@ -152,7 +152,7 @@ pipeline {
         //         }
         //     }
         // }
-        stage ('k8S'){
+        // stage ('k8S'){
             // parallel {
                 stage('K8S Deployment - DEV') {
                     steps {
@@ -189,7 +189,7 @@ pipeline {
                 //     }
                 // }
             // }
-        }
+        // }
     }
 }
 
