@@ -171,15 +171,15 @@ pipeline {
                                 sh "sleep 60"
 
                                 // Check rollout status
-                                def rolloutStatusCommand = "kubectl -n default rollout status deploy secure-ci-cd-pipeline-client --timeout=5s"
+                                def rolloutStatusCommand = "kubectl -n default rollout status deploy frontend --timeout=5s"
                                 def rolloutExitCode = sh(script: rolloutStatusCommand, returnStatus: true)
 
                                 if (rolloutExitCode != 0) {
-                                    echo "Deployment secure-ci-cd-pipeline-client Rollout has Failed"
-                                    sh "kubectl -n default rollout undo deploy secure-ci-cd-pipeline-client"
-                                    error "Deployment secure-ci-cd-pipeline-client rollout failed."
+                                    echo "Deployment frontend Rollout has Failed"
+                                    sh "kubectl -n default rollout undo deploy frontend"
+                                    error "Deployment frontend rollout failed."
                                 } else {
-                                    echo "Deployment secure-ci-cd-pipeline-client Rollout is Successful"
+                                    echo "Deployment frontend Rollout is Successful"
                                 }
                             }
                         }
