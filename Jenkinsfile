@@ -158,10 +158,7 @@ pipeline {
                     steps {
                         script {
                             withKubeConfig([credentialsId:'minikube-server']) {
-                            // Read the content of the Kubernetes YAML file
-                                def kubernetesFile = readFile("/home/khaled/DevOps/Secure_CI_CD_Pipeline/K8s/frontend-deployment.yaml")
-                                // Apply the updated Kubernetes deployment
-                                sh "kubectl -n default apply -f ${kubernetesFile}"
+                                sh 'kubectl -n default apply -f /home/khaled/DevOps/Secure_CI_CD_Pipeline/K8s/frontend-deployment.yaml'
                             }
                         }
                     }
