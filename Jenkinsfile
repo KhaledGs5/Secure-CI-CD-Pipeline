@@ -168,7 +168,7 @@ pipeline {
                         script {
                             withKubeConfig([credentialsId:'minikube-server']) {
                             // Wait for a minute before checking rollout status
-                            sh "powershell -Command Start-Sleep -Seconds 60"
+                            sh "pwsh -Command Start-Sleep -Seconds 60"
 
                             // Check rollout status
                             def rolloutStatusCommand = "kubectl -n default rollout status deploy secure-ci-cd-pipeline-client --timeout=5s"
